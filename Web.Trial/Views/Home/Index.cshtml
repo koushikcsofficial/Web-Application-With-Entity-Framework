@@ -1,0 +1,27 @@
+﻿@model Entity.Trial.UserModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+        @{
+            var toUser = ViewData.Model;
+        }
+        @toUser.User_Name;
+        <form action="~/Home/Index" method="post">
+            @Html.AntiForgeryToken();
+            <label for="subject">Subject</label>
+            <textarea id="msg" name="msg" placeholder="Write something.." style="height:200px"></textarea>
+            <input type="submit" value="Send">
+        </form>
+    </div>
+</body>
+</html>

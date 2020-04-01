@@ -1,0 +1,65 @@
+﻿@using Entity.Trial;
+@model dynamic
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>UserProfile</title>
+</head>
+<body>
+    <div>
+
+        @{
+            
+                @*@Session["UserId"] &nbsp;
+                @Session["UserEmail"] &nbsp;*@
+                <p><b>Hi, @Session["UserName"]; &nbsp;</b></p>
+                string url = "https://localhost:44367/Home/Index/" + Session["UserId"];
+                <h3>Your url is: <a href="@url"> @url </a></h3><br />
+                <p>Share and have fun</p><br /><br />
+
+        }
+
+
+        <p><b>You Have Received Following Messages</b></p>
+        <table>
+            <tr>
+                <th>Message</th>
+                <th>Time</th>
+            </tr>
+            @foreach (MessageModel rm in Model.ReceivedMessages)
+            {
+                <tr>
+                    <td>@rm.Message_Body</td>
+                    <td>@rm.Message_Time</td>
+                </tr>
+
+            }
+        </table>
+
+        <p><b>You Sent the following Messages</b></p>
+
+        <table>
+            <tr>
+                <th>Message</th>
+                <th>Time</th>
+                <th>To</th>
+            </tr>
+            @foreach (MessageModel sm in Model.SentMessages)
+            {
+                <tr>
+                    <td>@sm.Message_Body</td>
+                    <td>@sm.Message_Time</td>
+                    <td>@sm.To_User</td>
+                </tr>
+
+            }
+        </table>
+    </div>
+</body>
+</html>
