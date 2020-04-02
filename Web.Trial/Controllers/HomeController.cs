@@ -17,13 +17,24 @@ namespace Web.Trial.Controllers
         [HttpGet]
         public ActionResult UserProfile()
         {
-            string user = TempData["SenderEmail"].ToString();
-            var ReceivedMessages = from MessageModel in db.Messages where MessageModel.To_User == user select MessageModel;
-            var SentMessages = from MessageModel in db.Messages where MessageModel.From_User == user select MessageModel;
-            dynamic messages = new ExpandoObject();
-            messages.ReceivedMessages = ReceivedMessages;
-            messages.SentMessages = SentMessages;
-            return View(messages);
+            try
+            {
+                string user = TempData["SenderEmail"].ToString();
+                var ReceivedMessages = from MessageModel in db.Messages where MessageModel.To_User == user select MessageModel;
+                var SentMessages = from MessageModel in db.Messages where MessageModel.From_User == user select MessageModel;
+                dynamic messages = new ExpandoObject();
+                messages.ReceivedMessages = ReceivedMessages;
+                messages.SentMessages = SentMessages;
+                return View(messages);
+            }
+            catch(NullReferenceException e)
+            {
+                return RedirectToAction("Logout","Auth");
+            }catch(ArgumentException e)
+            {
+                return RedirectToAction("Logout", "Auth");
+            }
+            
         }
         // GET: Home
         [AllowAnonymous]

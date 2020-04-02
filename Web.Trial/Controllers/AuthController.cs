@@ -83,6 +83,13 @@ namespace Web.Trial.Controllers
             return View("Index");
         }
 
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Signup(string signupname, string signupemail, string signuppass, string signupconpass)
