@@ -17,8 +17,8 @@ namespace Web.AnonymousMsgProject.Controllers
             try
             {
                 string user = TempData["SenderEmail"].ToString();
-                var ReceivedMessages = from MessageModel in db.Messages where MessageModel.To_User == user select MessageModel;
-                var SentMessages = from MessageModel in db.Messages where MessageModel.From_User == user select MessageModel;
+                var ReceivedMessages = from MessageModel in db.Messages where MessageModel.To_User == user orderby MessageModel.Message_Time descending select MessageModel;
+                var SentMessages = from MessageModel in db.Messages where MessageModel.From_User == user orderby MessageModel.Message_Time descending select MessageModel;
                 dynamic messages = new ExpandoObject();
                 messages.ReceivedMessages = ReceivedMessages;
                 messages.SentMessages = SentMessages;
@@ -43,16 +43,22 @@ namespace Web.AnonymousMsgProject.Controllers
             {
                 return RedirectToAction("Login", "Auth");
             }
-            UserModel userModel = db.Users.Find(id);
-            if (userModel == null)
+            try
+            {
+                UserModel userModel = db.Users.Find(id);
+                if (userModel == null)
+                {
+                    return HttpNotFound();
+                }
+                else
+                {
+                    TempData["ReceiverId"] = id;
+                    return View(userModel);
+                }
+            }catch(Exception e)
             {
                 return HttpNotFound();
             }
-            else
-            {
-                TempData["ReceiverId"] = id;
-            }
-            return View(userModel);
         }
 
         [AllowAnonymous]
