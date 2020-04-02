@@ -115,6 +115,7 @@
     <Content Include="Views\Auth\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\UserProfile.cshtml" />
+    <None Include="Properties\PublishProfiles\Somee.com Deployment.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
