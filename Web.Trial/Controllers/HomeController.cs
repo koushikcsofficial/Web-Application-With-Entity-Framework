@@ -78,7 +78,7 @@ namespace Web.Trial.Controllers
             }
             else
             {
-                message.From_User = "Annonymous";
+                message.From_User = "Anonymous";
             }
             db.Messages.Add(message);
             db.SaveChanges();
