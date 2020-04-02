@@ -16,7 +16,7 @@
 <body>
     <!-- partial:index.partial.html -->
     <h2>Welcome, @Session["UserName"]</h2>
-    <h5>You are @Session["UserRole"] by role and @Session["UserEmail"] is your Email address.</h5>
+    <h5>You are a @Session["UserRole"] and @Session["UserEmail"] is your Email address.</h5>
     <div class="warpper">
         <input class="radio" id="one" name="group" type="radio" checked>
         <input class="radio" id="two" name="group" type="radio">
@@ -92,7 +92,7 @@
             <div class="panel" id="three-panel">
                 <div class="panel-title col-lg-12">More Options</div>
                 @{
-                    string url = "https://localhost:44367/Home/Index/" + Session["UserId"];
+                    string url = "http://www.anonymousmsg.somee.com/Home/Index/" + Session["UserId"];
                     <p><b>Your url is:<a href="@url"> @url </a></b></p><br />
                     <p>Share the link and have fun</p>
                 }
@@ -112,6 +112,7 @@
             </div>
         </div>
     </div>
+    <p>Developed with asp.net MVC. &copy; reserved to Koushik Saha 2020.</p>
     <!-- partial -->
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>

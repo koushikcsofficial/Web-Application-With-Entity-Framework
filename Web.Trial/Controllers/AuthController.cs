@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using Entity.Anonymous;
 using System.Web.Security;
 
-namespace Web.Trial.Controllers
+namespace Web.Anonymous.Controllers
 {
     public class AuthController : Controller
     {
