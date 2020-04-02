@@ -163,9 +163,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Entity.Trial\Entity.Trial.csproj">
+    <ProjectReference Include="..\Entity.Trial\Entity.Anonymous.csproj">
       <Project>{941B393C-9029-402C-8C04-93901EC93A7F}</Project>
-      <Name>Entity.Trial</Name>
+      <Name>Entity.Anonymous</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

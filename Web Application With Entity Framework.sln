@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Trial", "Web.Trial\Web.Trial.csproj", "{B6CCEF02-7218-49BC-80C7-B73BBFB9042D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Anonymous", "Web.Trial\Web.Anonymous.csproj", "{B6CCEF02-7218-49BC-80C7-B73BBFB9042D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity.Trial", "Entity.Trial\Entity.Trial.csproj", "{941B393C-9029-402C-8C04-93901EC93A7F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity.Anonymous", "Entity.Trial\Entity.Anonymous.csproj", "{941B393C-9029-402C-8C04-93901EC93A7F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

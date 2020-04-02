@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Trial
+namespace Entity.Anonymous
 {
     [Table("Roles")]
     public sealed class RoleModel

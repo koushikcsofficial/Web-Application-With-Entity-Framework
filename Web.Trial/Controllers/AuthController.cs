@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Entity.Trial;
+using Entity.Anonymous;
 using System.Web.Security;
 
 namespace Web.Trial.Controllers
