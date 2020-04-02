@@ -16,6 +16,7 @@
 <body>
     <!-- partial:index.partial.html -->
     <h2>Welcome, @Session["UserName"]</h2>
+    <h5>You are @Session["UserRole"] by role and @Session["UserEmail"] is your Email address.</h5>
     <div class="warpper">
         <input class="radio" id="one" name="group" type="radio" checked>
         <input class="radio" id="two" name="group" type="radio">
@@ -43,7 +44,7 @@
                                 <td>From</td>
                                 <td>Time</td>
                             </tr>
-                            @{ 
+                            @{
                                 string MessageFrom = "Anonymous";
                             }
                             @foreach (MessageModel rm in Model.ReceivedMessages)
@@ -90,19 +91,22 @@
             </div>
             <div class="panel" id="three-panel">
                 <div class="panel-title col-lg-12">More Options</div>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    @Html.ActionLink("Logout", "Logout", "Auth")
-
-                }
-                else
-                {
-                    @Html.ActionLink("Login", "Login", "Auth")
-                }
                 @{
                     string url = "https://localhost:44367/Home/Index/" + Session["UserId"];
                     <p><b>Your url is:<a href="@url"> @url </a></b></p><br />
                     <p>Share the link and have fun</p>
+                }
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form action="~/Auth/Logout" method="get">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block mb-2">Logout</button>
+                    </form>
+                }
+                else
+                {
+                    <form action="~/Auth/Login" method="get">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block mb-2">Login</button>
+                    </form>
                 }
 
             </div>

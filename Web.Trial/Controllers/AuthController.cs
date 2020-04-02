@@ -39,14 +39,25 @@ namespace Web.Trial.Controllers
 
                 if (IsValid)
                 {
-                    var result = from UserModel in db.Users where UserModel.User_Email == loginemail && UserModel.User_Password == loginpass select UserModel;
+                    //var result = from UserModel in db.Users where UserModel.User_Email == loginemail && UserModel.User_Password == loginpass select UserModel;
+                    var result = from UserModel in db.Users
+                                 join RoleModel in db.Roles on UserModel.User_Role equals RoleModel.Role_Id
+                                 where UserModel.User_Email == loginemail && UserModel.User_Password == loginpass
+                                 select new
+                                 {
+                                     UserId = UserModel.User_Id,
+                                     UserEmail = UserModel.User_Email,
+                                     UserName = UserModel.User_Name,
+                                     UserRole = RoleModel.Role_Name
+                                 };
                     FormsAuthentication.SetAuthCookie(user.User_Email, false);
                     foreach(var r in result)
                     {
-                        Session["UserId"] = r.User_Id;
-                        Session["UserEmail"] = r.User_Email;
-                        Session["UserName"] = r.User_Name;
-                        TempData["SenderEmail"] = r.User_Email;
+                        Session["UserId"] = r.UserId;
+                        Session["UserEmail"] = r.UserEmail;
+                        Session["UserName"] = r.UserName;
+                        Session["UserRole"] = r.UserRole;
+                        TempData["SenderEmail"] = r.UserEmail;
                     }
                         return RedirectToAction("UserProfile", "Home");
                     //int UserId = user.User_Id;
