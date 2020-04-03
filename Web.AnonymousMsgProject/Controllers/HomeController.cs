@@ -8,6 +8,7 @@ namespace Web.AnonymousMsgProject.Controllers
 {
     public class HomeController : Controller
     {
+        private static TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
         private DataContext db = new DataContext();
 
         [Authorize]
@@ -16,7 +17,7 @@ namespace Web.AnonymousMsgProject.Controllers
         {
             try
             {
-                string user = TempData["SenderEmail"].ToString();
+                string user = Session["UserEmail"].ToString();
                 var ReceivedMessages = from MessageModel in db.Messages where MessageModel.To_User == user orderby MessageModel.Message_Time descending select MessageModel;
                 var SentMessages = from MessageModel in db.Messages where MessageModel.From_User == user orderby MessageModel.Message_Time descending select MessageModel;
                 dynamic messages = new ExpandoObject();
@@ -24,11 +25,11 @@ namespace Web.AnonymousMsgProject.Controllers
                 messages.SentMessages = SentMessages;
                 return View(messages);
             }
-            catch (NullReferenceException e)
+            catch (NullReferenceException )
             {
                 return RedirectToAction("Logout", "Auth");
             }
-            catch (ArgumentException e)
+            catch (ArgumentException )
             {
                 return RedirectToAction("Logout", "Auth");
             }
@@ -55,7 +56,7 @@ namespace Web.AnonymousMsgProject.Controllers
                     TempData["ReceiverId"] = id;
                     return View(userModel);
                 }
-            }catch(Exception e)
+            }catch(Exception )
             {
                 return HttpNotFound();
             }
@@ -70,11 +71,11 @@ namespace Web.AnonymousMsgProject.Controllers
             int ReceiverId = Convert.ToInt32(TempData["ReceiverId"]);
             var ReceiverDetails = db.Users.Find(ReceiverId);
             string ReceiverEmail = ReceiverDetails.User_Email;
-            DateTime dt = DateTime.Now;
+            DateTime indianTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
 
             message.To_User = ReceiverEmail;
             message.Message_Body = msg;
-            message.Message_Time = dt;
+            message.Message_Time = indianTime;
             if (User.Identity.IsAuthenticated)
             {
                 string SenderEmail = TempData["SenderEmail"].ToString();

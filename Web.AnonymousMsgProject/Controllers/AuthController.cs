@@ -3,16 +3,28 @@ using System.Web.Security;
 using System.Linq;
 using System;
 using Entity.AnonymousMsgProject;
+using System.Web;
 
 namespace Web.AnonymousMsgProject.Controllers
 {
     public class AuthController : Controller
     {
-        DataContext db = new DataContext();
+        private DataContext db = new DataContext();
+        private int UserId;
+        private string UserEmail ;
+        private string UserName ;
+        private string UserRole;
         // GET: Auth
         public ActionResult Login()
         {
-            return View("Index");
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("UserProfile", "Home");
+            }
+            else
+            {
+                return View("Index");
+            }
         }
 
         [HttpPost]
@@ -24,12 +36,14 @@ namespace Web.AnonymousMsgProject.Controllers
                 UserModel user = new UserModel();
                 if ((loginemail == null && loginpass == null) || (loginemail == null || loginpass == null))
                 {
-                    throw new NullReferenceException();
+                    ModelState.AddModelError("", "invalid Username or Password");
+                    return View();
+
                 }
                 else
                 {
 
-                    user.User_Email = loginemail;
+                    user.User_Email = loginemail.ToLower();
                     user.User_Password = loginpass;
                 }
 
@@ -37,7 +51,6 @@ namespace Web.AnonymousMsgProject.Controllers
 
                 if (IsValid)
                 {
-                    //var result = from UserModel in db.Users where UserModel.User_Email == loginemail && UserModel.User_Password == loginpass select UserModel;
                     var result = from UserModel in db.Users
                                  join RoleModel in db.Roles on UserModel.User_Role equals RoleModel.Role_Id
                                  where UserModel.User_Email == loginemail && UserModel.User_Password == loginpass
@@ -48,30 +61,35 @@ namespace Web.AnonymousMsgProject.Controllers
                                      UserName = UserModel.User_Name,
                                      UserRole = RoleModel.Role_Name
                                  };
-                    FormsAuthentication.SetAuthCookie(user.User_Email, false);
+                    //FormsAuthentication.SetAuthCookie(user.User_Email, false);
                     foreach (var r in result)
                     {
-                        Session["UserId"] = r.UserId;
-                        Session["UserEmail"] = r.UserEmail;
-                        Session["UserName"] = r.UserName;
-                        Session["UserRole"] = r.UserRole;
-                        TempData["SenderEmail"] = r.UserEmail;
+                        UserId = r.UserId;
+                        UserEmail = r.UserEmail;
+                        UserName = r.UserName;
+                        UserRole = r.UserRole;
+
                     }
-                    return RedirectToAction("UserProfile", "Home");
+                    //return RedirectToAction("UserProfile", "Home");
                     //int UserId = user.User_Id;
-                    //FormsAuthenticationTicket Authticket = new FormsAuthenticationTicket(
-                    //                                           1,
-                    //                                           UserId.ToString() + ",",
-                    //                                           DateTime.Now,
-                    //                                           DateTime.Now.AddMinutes(60),
-                    //                                           false,
-                    //                                           user.User_Id.ToString());
-                    //string hash = FormsAuthentication.Encrypt(Authticket);
-                    //HttpCookie Authcookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
-                    //if (Authticket.IsPersistent)
-                    //    Authcookie.Expires = Authticket.Expiration;
-                    //Response.Cookies.Add(Authcookie);
-                    //return RedirectToAction("Index", "Home");
+                    FormsAuthenticationTicket Authticket = new FormsAuthenticationTicket(
+                                                               1,
+                                                               UserId.ToString() + ",",
+                                                               DateTime.Now,
+                                                               DateTime.Now.AddMinutes(60),
+                                                               false,
+                                                               UserId.ToString());
+                    string hash = FormsAuthentication.Encrypt(Authticket);
+                    HttpCookie Authcookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
+                    if (Authticket.IsPersistent)
+                        Authcookie.Expires = Authticket.Expiration;
+                    Response.Cookies.Add(Authcookie);
+                    Session["UserId"] = UserId;
+                    Session["UserEmail"] = UserEmail;
+                    Session["UserName"] = UserName;
+                    Session["UserRole"] = UserRole;
+                    //TempData["SenderEmail"] = UserEmail;
+                    return RedirectToAction("UserProfile", "Home");
                 }
                 else
                 {
@@ -118,19 +136,6 @@ namespace Web.AnonymousMsgProject.Controllers
                         bool EmailIsPresent = db.Users.Any(x => x.User_Email == user.User_Email);
                         if (!EmailIsPresent)
                         {
-                            //List<object> item = new List<object>();
-                            //item.Add(user.User_Name);
-                            //item.Add(user.User_Email);
-                            //item.Add(user.User_Password);
-                            //item.Add(user.User_Role);
-                            //object[] allitems = item.ToArray();
-                            ////SQL Query function is used only for retrieve sql tables. 
-                            ////To Perform Insert, Update , Delete we use Database.ExecuteSqlCommand which will return affected rows in database table
-                            //int output = db.Database.ExecuteSqlCommand("insert into Users(User_Name,User_Email,User_Password,User_Role) values(@p0,@p1,@p2,@p3)", allitems);
-                            //if (output > 0)
-                            //{
-                            //    ViewBag.signupsucc = "Your account with " + user.User_Email + "  created Successfully. Please login";
-                            //}
                             db.Users.Add(user);
                             db.SaveChanges();
                             return View("Index");
